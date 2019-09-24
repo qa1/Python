@@ -1,17 +1,3 @@
-"""
-This is pure python implementation of bubble sort algorithm
-
-For doctests run following command:
-python -m doctest -v bubble_sort.py
-or
-python3 -m doctest -v bubble_sort.py
-
-For manual testing run:
-python bubble_sort.py
-"""
-from __future__ import print_function
-
-
 def bubble_sort(collection):
     """Pure implementation of bubble sort algorithm in Python
 
@@ -28,25 +14,26 @@ def bubble_sort(collection):
 
     >>> bubble_sort([-2, -5, -45])
     [-45, -5, -2]
+
+    >>> bubble_sort([-23, 0, 6, -4, 34])
+    [-23, -4, 0, 6, 34]
+
+    >>> bubble_sort([-23, 0, 6, -4, 34]) == sorted([-23, 0, 6, -4, 34])
+    True
     """
     length = len(collection)
-    for i in range(length):
-        for j in range(length-1):
+    for i in range(length-1):
+        swapped = False
+        for j in range(length-1-i):
             if collection[j] > collection[j+1]:
+                swapped = True
                 collection[j], collection[j+1] = collection[j+1], collection[j]
-
+        if not swapped:
+            break  # Stop iteration if the collection is sorted.
     return collection
 
 
 if __name__ == '__main__':
-    import sys
-    # For python 2.x and 3.x compatibility: 3.x has not raw_input builtin
-    # otherwise 2.x's input builtin function is too "smart"
-    if sys.version_info.major < 3:
-        input_function = raw_input
-    else:
-        input_function = input
-
-    user_input = input_function('Enter numbers separated by coma:\n')
+    user_input = input('Enter numbers separated by a comma:').strip()
     unsorted = [int(item) for item in user_input.split(',')]
-    print(bubble_sort(unsorted))
+    print(*bubble_sort(unsorted), sep=',')

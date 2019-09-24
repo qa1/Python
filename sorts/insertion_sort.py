@@ -1,5 +1,5 @@
 """
-This is pure python implementation of insertion sort algorithm
+This is a pure python implementation of the insertion sort algorithm
 
 For doctests run following command:
 python -m doctest -v insertion_sort.py
@@ -9,11 +9,8 @@ python3 -m doctest -v insertion_sort.py
 For manual testing run:
 python insertion_sort.py
 """
-from __future__ import print_function
-
-
 def insertion_sort(collection):
-    """Pure implementation of insertion sort algorithm in Python
+    """Pure implementation of the insertion sort algorithm in Python
 
     :param collection: some mutable ordered collection with heterogeneous
     comparable items inside
@@ -29,28 +26,17 @@ def insertion_sort(collection):
     >>> insertion_sort([-2, -5, -45])
     [-45, -5, -2]
     """
-    length = len(collection)
-    for i in range(length):
-        current_item = collection[i]
-        j = i - 1
-        while j >= 0 and current_item < collection[j]:
-            collection[j+1] = collection[j]
-            j -= 1
-        collection[j+1] = current_item
+
+    for loop_index in range(1, len(collection)):
+        insertion_index = loop_index
+        while insertion_index > 0 and collection[insertion_index - 1] > collection[insertion_index]:
+            collection[insertion_index], collection[insertion_index - 1] = collection[insertion_index - 1], collection[insertion_index]
+            insertion_index -= 1
 
     return collection
 
 
 if __name__ == '__main__':
-    import sys
-
-    # For python 2.x and 3.x compatibility: 3.x has not raw_input builtin
-    # otherwise 2.x's input builtin function is too "smart"
-    if sys.version_info.major < 3:
-        input_function = raw_input
-    else:
-        input_function = input
-
-    user_input = input_function('Enter numbers separated by coma:\n')
+    user_input = input('Enter numbers separated by a comma:\n').strip()
     unsorted = [int(item) for item in user_input.split(',')]
     print(insertion_sort(unsorted))

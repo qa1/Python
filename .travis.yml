@@ -1,11 +1,16 @@
 language: python
-python:
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-install: 
-  - if [ "$TRAVIS_PYTHON_VERSION" == "3.2" ]; then travis_retry pip install coverage==3.7.1; fi
-  - if [ "$TRAVIS_PYTHON_VERSION" != "3.2" ]; then travis_retry pip install coverage; fi
-  - "pip install pytest pytest-cov"
-script: py.test --doctest-modules --cov ./
+dist: xenial  # required for Python >= 3.7
+python: 3.7
+cache: pip
+before_install: pip install --upgrade pip setuptools
+install: pip install -r requirements.txt
+before_script:
+  - black --check . || true
+  - flake8 . --count --select=E9,F4,F63,F7,F82 --show-source --statistics
+script:
+  - scripts/validate_filenames.py  # no uppercase, no spaces, in a directory
+  - mypy --ignore-missing-imports .
+  - pytest . --doctest-modules
+after_success:
+  - scripts/build_directory_md.py > DIRECTORY.md
+  - cat DIRECTORY.md
